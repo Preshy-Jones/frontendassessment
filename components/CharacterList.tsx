@@ -8,6 +8,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React from "react";
+import Character from "./Character";
+import { useCharacter } from "../hooks/useCharacter";
 import { useCharacters } from "../hooks/useCharacters";
 
 const CharacterList: React.FC = () => {
@@ -17,6 +19,7 @@ const CharacterList: React.FC = () => {
     image: string;
   }
   const { loading, error, data } = useCharacters();
+
   console.log({ loading, error, data });
 
   return (
@@ -37,6 +40,8 @@ const CharacterList: React.FC = () => {
           rowGap={5}
           width="75%"
         >
+          {}
+
           {data &&
             data.characters.results.map((character: Character) => (
               <GridItem key={character.id}>

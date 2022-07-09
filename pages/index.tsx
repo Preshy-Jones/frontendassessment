@@ -8,7 +8,8 @@ import {
   ApolloProvider,
   gql,
 } from "@apollo/client";
-import CharacterList from "./CharacterList";
+import CharacterList from "../components/CharacterList";
+import Character from "../components/Character";
 
 const Home: NextPage = () => {
   return (
@@ -19,7 +20,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <CharacterList />
+      <Character />
     </div>
   );
 };
