@@ -9,30 +9,48 @@ import {
 } from "@apollo/client";
 import { RetryLink } from "@apollo/client/link/retry";
 import { onError } from "@apollo/client/link/error";
+import { ChakraProvider } from "@chakra-ui/react";
+import type { ReactElement, ReactNode } from "react";
+import type { NextPage } from "next";
 
-const errorLink = onError(({ graphqlErrors, networkError }) => {
-  if (graphqlErrors) {
-    graphqlErrors.map(({ message, location, path }) => {
-      alert(`Graphql error ${message}`);
-    });
-  }
-});
+type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
 
-const link = from([
-  errorLink,
-  new HttpLink({ uri: "https://rickandmortyapi.com/graphql" }),
-]);
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+// const errorLink = onError(({ graphqlErrors, networkError }) => {
+//   if (graphqlErrors) {
+//     graphqlErrors.map(({ message, location, path }) => {
+//       alert(`Graphql error ${message}`);
+//     });
+//   }
+// });
+
+// const link = from([
+//   errorLink,
+//   new HttpLink({ uri: process.env.NEXT_PUBLIC_GRAPHQL_API_ENDPOINT }),
+// ]);
 
 const client = new ApolloClient({
-  // uri: "https://rickandmortyapi.com/graphql",
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_API_ENDPOINT,
   cache: new InMemoryCache(),
-  link: link,
 });
+
+// const client = new ApolloClient({
+//   // uri: "https://rickandmortyapi.com/graphql",
+//   cache: new InMemoryCache(),
+//   link: link,
+// });
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
-      <Component {...pageProps} />
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
     </ApolloProvider>
   );
 }
