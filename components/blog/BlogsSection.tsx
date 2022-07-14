@@ -8,7 +8,9 @@ import Blog from "./Blog";
 const BlogsSection: React.FC = () => {
   const { loading, data, error, refetch } = usePosts("", "", 0, 15, true);
   const { getPosts, searchLoading, searchError, searchData, searchRefetch } =
-    useSearch("");
+    useSearch("", "", "", 0, 15);
+  ;
+
   // const [isFiltered, setIsFiltered] = useState(false);
 
   const { isSearch } = useAppSelector((store) => store.blog);

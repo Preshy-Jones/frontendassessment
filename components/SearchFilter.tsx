@@ -12,7 +12,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { changeSearchStatus } from "../features/blog/blogSlice";
+import { changeSearchStatus, setSearchValue } from "../features/blog/blogSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { filterData } from "../utils/filterData";
 
@@ -22,6 +22,7 @@ const SearchFilter: React.FC = ({ refetch, searchRefetch, getPosts }: any) => {
     title: string;
     min_minute_read: number;
     max_minute_read: number;
+    searchValue?: string;
   }
   const filterValues: filterValuesInterface = {
     category: "",
@@ -29,30 +30,51 @@ const SearchFilter: React.FC = ({ refetch, searchRefetch, getPosts }: any) => {
     min_minute_read: 0,
     max_minute_read: 15,
   };
-  const { isSearch } = useAppSelector((store) => store.blog);
+  // const [searchValue, setSearchValue] = useState("");
+  const { isSearch, searchValue } = useAppSelector((store) => store.blog);
+  const searchFilterValues: filterValuesInterface = {
+    searchValue: searchValue,
+    category: "",
+    title: "",
+    min_minute_read: 0,
+    max_minute_read: 15,
+  };
 
   const [filterState, setFilterState] =
     useState<filterValuesInterface>(filterValues);
 
-  const handleRefetch = (e, filter: string) => {
-    setFilterState((prevState) => {
-      return { ...prevState, [filter]: Number(e.target.value) };
-    });
+  const [searchFilterState, setSearchFilterState] =
+    useState<filterValuesInterface>(searchFilterValues);
 
-    console.log(filterState);
+  const handleRefetch = (e, filter: string) => {
+    const processedFilter =
+      filter === "category" || filter === "title"
+        ? e.target.value
+        : Number(e.target.value);
+
+    console.log(isSearch);
+    console.log(searchValue);
+
     if (isSearch) {
+      setSearchFilterState((prevState) => {
+        return { ...prevState, [filter]: processedFilter };
+      });
+      console.log(searchFilterState);
       searchRefetch({
-        ...filterState,
-        [filter]: Number(e.target.value),
+        ...searchFilterState,
+        [filter]: processedFilter,
       });
     } else {
+      console.log(filterState);
+      setFilterState((prevState) => {
+        return { ...prevState, [filter]: processedFilter };
+      });
       refetch({
         ...filterState,
-        [filter]: Number(e.target.value),
+        [filter]: processedFilter,
       });
     }
   };
-  const [searchValue, setSearchValue] = useState("");
 
   const dispatch = useAppDispatch();
 
@@ -66,6 +88,7 @@ const SearchFilter: React.FC = ({ refetch, searchRefetch, getPosts }: any) => {
   return (
     <Flex justify="center">
       <Box width="75%">
+        <Text>{searchValue}</Text>
         <form onSubmit={handleSearch}>
           <Flex>
             <InputGroup>
@@ -75,7 +98,7 @@ const SearchFilter: React.FC = ({ refetch, searchRefetch, getPosts }: any) => {
               />
               <Input
                 value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
+                onChange={(e) => dispatch(setSearchValue(e.target.value))}
                 type="text"
                 placeholder="Search by title, author or category"
               />
