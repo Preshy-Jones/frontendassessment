@@ -12,6 +12,7 @@ import { onError } from "@apollo/client/link/error";
 import { ChakraProvider } from "@chakra-ui/react";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
+import theme from "../styles/theme";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -48,7 +49,7 @@ const client = new ApolloClient({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <Component {...pageProps} />
       </ChakraProvider>
     </ApolloProvider>

@@ -7,6 +7,7 @@ import { Box, Text } from "@chakra-ui/react";
 import Navbar from "../components/NavBar";
 import BlogsSection from "../components/blog/BlogsSection";
 import { usePosts } from "../hooks";
+import SearchFilter from "../components/SearchFilter";
 
 const Home: NextPage = () => {
   return (
