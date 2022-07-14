@@ -13,6 +13,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import theme from "../styles/theme";
+import { Provider } from "react-redux";
+import { store } from "../store/store";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -49,9 +51,11 @@ const client = new ApolloClient({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
-      <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
+      <Provider store={store}>
+        <ChakraProvider theme={theme}>
+          <Component {...pageProps} />
+        </ChakraProvider>
+      </Provider>
     </ApolloProvider>
   );
 }

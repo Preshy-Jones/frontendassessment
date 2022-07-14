@@ -1,36 +1,22 @@
-import { PhoneIcon } from "@chakra-ui/icons";
+import { SearchIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   Center,
   Flex,
   Input,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
   Select,
   Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { changeSearchStatus } from "../features/blog/blogSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { filterData } from "../utils/filterData";
 
-const SearchFilter: React.FC = ({ refetch }: any) => {
-  const filterData = {
-    categories: [
-      {
-        name: "Fantasy",
-        slug: "fantasy",
-      },
-      {
-        name: "Sport",
-        slug: "sport",
-      },
-      {
-        name: "Artificial Intelligence",
-        slug: "artificial-intelligence",
-      },
-    ],
-    title: "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z",
-    minute_read: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-  };
-
+const SearchFilter: React.FC = ({ refetch, searchRefetch, getPosts }: any) => {
   interface filterValuesInterface {
     category: string;
     title: string;
@@ -43,6 +29,7 @@ const SearchFilter: React.FC = ({ refetch }: any) => {
     min_minute_read: 0,
     max_minute_read: 15,
   };
+  const { isSearch } = useAppSelector((store) => store.blog);
 
   const [filterState, setFilterState] =
     useState<filterValuesInterface>(filterValues);
@@ -53,28 +40,59 @@ const SearchFilter: React.FC = ({ refetch }: any) => {
     });
 
     console.log(filterState);
-
-    refetch({
-      ...filterState,
-      [filter]: Number(e.target.value),
-    });
+    if (isSearch) {
+      searchRefetch({
+        ...filterState,
+        [filter]: Number(e.target.value),
+      });
+    } else {
+      refetch({
+        ...filterState,
+        [filter]: Number(e.target.value),
+      });
+    }
   };
+  const [searchValue, setSearchValue] = useState("");
+
+  const dispatch = useAppDispatch();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log(searchValue);
+    dispatch(changeSearchStatus(true));
+    getPosts({ variables: { searchValue: searchValue } });
+  };
+
   return (
     <Flex justify="center">
       <Box width="75%">
-        <InputGroup>
-          <InputLeftElement
-            pointerEvents="none"
-            children={<PhoneIcon color="gray.300" />}
-          />
-          <Input
-            type="text"
-            placeholder="Searcg by title, author or category"
-          />
-        </InputGroup>
-        <Center>
-          <Text fontSize="3xl">Filters</Text>
-        </Center>
+        <form onSubmit={handleSearch}>
+          <Flex>
+            <InputGroup>
+              <InputLeftElement
+                pointerEvents="none"
+                children={<SearchIcon color="gray.300" />}
+              />
+              <Input
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                type="text"
+                placeholder="Search by title, author or category"
+              />
+            </InputGroup>
+            <Button
+              type="submit"
+              backgroundColor="pink.600"
+              borderRightRadius="10"
+            >
+              <SearchIcon cursor="pointer" color="white" fontSize="xl" />
+            </Button>
+          </Flex>
+        </form>
+
+        <Text mt={10} fontSize="3xl">
+          Filters
+        </Text>
         <Flex>
           <Select
             onChange={(e) => handleRefetch(e, "category")}

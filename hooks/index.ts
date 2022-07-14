@@ -1,4 +1,4 @@
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, gql, useLazyQuery } from "@apollo/client";
 
 const GET_POSTS = gql`
   query MyQuery {
@@ -77,6 +77,46 @@ const GET_FILTERED_POSTS = gql`
     }
   }
 `;
+
+const GET_SEARCHED_POSTS = gql`
+  query MyQuery($searchValue: String = "jong") {
+    posts: posts(
+      where: {
+        OR: [
+          { categories_some: { slug_contains: $searchValue } }
+          { title_contains: $searchValue }
+          { author: { name_contains: $searchValue } }
+        ]
+      }
+    ) {
+      ...postFields
+    }
+  }
+
+  fragment postFields on Post {
+    author {
+      bio
+      createdAt
+      name
+      id
+      photo {
+        url
+      }
+    }
+    createdAt
+    excerpt
+    minuteRead
+    slug
+    title
+    featuredImage {
+      url
+    }
+    categories {
+      slug
+      name
+    }
+  }
+`;
 // interface PostPayload {
 //   categories: string;
 //   isFiltered: string;
@@ -100,4 +140,21 @@ export const usePosts = (
   });
 
   return { loading, error, data, refetch };
+};
+
+export const useSearch = (searchValue: string) => {
+  const [getPosts, { loading, error, data, refetch }] = useLazyQuery(
+    GET_SEARCHED_POSTS,
+    {
+      variables: {
+        searchValue,
+      },
+    }
+  );
+
+  const searchLoading = loading;
+  const searchError = error;
+  const searchData = data;
+  const searchRefetch = fetch;
+  return { getPosts, searchLoading, searchError, searchData, searchRefetch };
 };

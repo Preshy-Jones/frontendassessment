@@ -1,27 +1,23 @@
 import { Box, Button, Flex, Grid, GridItem, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { usePosts } from "../../hooks";
+import { usePosts, useSearch } from "../../hooks";
+import { useAppSelector } from "../../store/hooks";
 import SearchFilter from "../SearchFilter";
 import Blog from "./Blog";
 
 const BlogsSection: React.FC = () => {
   const { loading, data, error, refetch } = usePosts("", "", 0, 15, true);
+  const { getPosts, searchLoading, searchError, searchData, searchRefetch } =
+    useSearch("");
   // const [isFiltered, setIsFiltered] = useState(false);
 
-  // if (loading) return "Loading...";
-  // if (error) return `Error! ${error.message}`;
+  const { isSearch } = useAppSelector((store) => store.blog);
 
-  const [dataFetched, setDataFetched] = useState();
+  if (loading) return "Loading...";
+  if (error) return `Error! ${error.message}`;
 
-  // const fetchPosts = () => {
-  //   const { loading, data, error } = usePosts();
-  // console.log(data);
-
-  // };
-  // useEffect(() => {
-  //   setDataFetched(data);
-  //   console.log(dataFetched);
-  // }, [data]);
+  if (searchLoading) return "Loading...";
+  if (searchError) return `Error! ${searchError.message}`;
 
   const handleFilter = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -35,7 +31,11 @@ const BlogsSection: React.FC = () => {
   };
   return (
     <Box>
-      <SearchFilter refetch={refetch} />
+      <SearchFilter
+        refetch={refetch}
+        searchRefetch={searchRefetch}
+        getPosts={getPosts}
+      />
       <Flex justify="center">
         <Grid
           pt={12}
@@ -45,7 +45,15 @@ const BlogsSection: React.FC = () => {
           width="75%"
         >
           {data &&
+            !isSearch &&
             data.posts.map((post: any, index: any) => (
+              <GridItem key={index}>
+                <Blog post={post} />
+              </GridItem>
+            ))}
+          {isSearch &&
+            searchData &&
+            searchData.posts.map((post: any, index: any) => (
               <GridItem key={index}>
                 <Blog post={post} />
               </GridItem>
