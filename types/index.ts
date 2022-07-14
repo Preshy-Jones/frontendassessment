@@ -5,6 +5,7 @@ export interface Post {
   title: string;
   featuredImage: Photo;
   categories: Category[];
+  minuteRead: number;
 }
 
 export interface Author {
@@ -23,5 +24,3 @@ export interface Category {
   slug: string;
   name: string;
 }
-
-

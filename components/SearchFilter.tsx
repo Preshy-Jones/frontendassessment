@@ -1,4 +1,14 @@
-import { Box, Center, Flex, Select, Text } from "@chakra-ui/react";
+import { PhoneIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Center,
+  Flex,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Select,
+  Text,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 
 const SearchFilter: React.FC = ({ refetch }: any) => {
@@ -24,14 +34,14 @@ const SearchFilter: React.FC = ({ refetch }: any) => {
   interface filterValuesInterface {
     category: string;
     title: string;
-    min_minute_read: string;
-    max_minute_read: string;
+    min_minute_read: number;
+    max_minute_read: number;
   }
   const filterValues: filterValuesInterface = {
     category: "",
     title: "",
-    min_minute_read: "",
-    max_minute_read: "",
+    min_minute_read: 0,
+    max_minute_read: 15,
   };
 
   const [filterState, setFilterState] =
@@ -39,21 +49,31 @@ const SearchFilter: React.FC = ({ refetch }: any) => {
 
   const handleRefetch = (e, filter: string) => {
     setFilterState((prevState) => {
-      return { ...prevState, [filter]: e.target.value };
+      return { ...prevState, [filter]: Number(e.target.value) };
     });
 
     console.log(filterState);
 
     refetch({
       ...filterState,
-      [filter]: e.target.value,
+      [filter]: Number(e.target.value),
     });
   };
   return (
     <Flex justify="center">
       <Box width="75%">
+        <InputGroup>
+          <InputLeftElement
+            pointerEvents="none"
+            children={<PhoneIcon color="gray.300" />}
+          />
+          <Input
+            type="text"
+            placeholder="Searcg by title, author or category"
+          />
+        </InputGroup>
         <Center>
-          <Text fontSize="3xl">Filter</Text>
+          <Text fontSize="3xl">Filters</Text>
         </Center>
         <Flex>
           <Select
@@ -81,14 +101,26 @@ const SearchFilter: React.FC = ({ refetch }: any) => {
             ))}
           </Select>
           <Select
-            onChange={(e) => handleRefetch(e, "title")}
-            placeholder="By first letter of title"
+            onChange={(e) => handleRefetch(e, "min_minute_read")}
+            placeholder="Lowest minute read"
             w="fit-content"
             p="2"
           >
-            {filterData.title.split(",").map((alphabet, index) => (
-              <option key={index} value={alphabet}>
-                {alphabet}
+            {filterData.minute_read.map((minute, index) => (
+              <option key={index} value={minute}>
+                {`${minute}  min`}
+              </option>
+            ))}
+          </Select>
+          <Select
+            onChange={(e) => handleRefetch(e, "max_minute_read")}
+            placeholder="Maximum minute read"
+            w="fit-content"
+            p="2"
+          >
+            {filterData.minute_read.map((minute, index) => (
+              <option key={index} value={minute}>
+                {`${minute}  min`}
               </option>
             ))}
           </Select>

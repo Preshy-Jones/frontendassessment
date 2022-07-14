@@ -5,7 +5,7 @@ import SearchFilter from "../SearchFilter";
 import Blog from "./Blog";
 
 const BlogsSection: React.FC = () => {
-  const { loading, data, error, refetch } = usePosts("", "", true);
+  const { loading, data, error, refetch } = usePosts("", "", 0, 15, true);
   // const [isFiltered, setIsFiltered] = useState(false);
 
   // if (loading) return "Loading...";
@@ -15,7 +15,7 @@ const BlogsSection: React.FC = () => {
 
   // const fetchPosts = () => {
   //   const { loading, data, error } = usePosts();
-  console.log(data);
+  // console.log(data);
 
   // };
   // useEffect(() => {

@@ -35,13 +35,17 @@ const GET_FILTERED_POSTS = gql`
   query MyQuery(
     $category: String
     $title: String
-    $isFiltered: Boolean = true
+    $min_minute_read: Int
+    $max_minute_read: Int
+    $isFiltered: Boolean = false
   ) {
     posts: posts(
       where: {
         AND: [
           { categories_some: { slug_contains: $category } }
           { title_starts_with: $title }
+          { minuteRead_gte: $min_minute_read }
+          { minuteRead_lte: $max_minute_read }
         ]
       }
     ) @include(if: $isFiltered) {
@@ -61,6 +65,7 @@ const GET_FILTERED_POSTS = gql`
     }
     createdAt
     excerpt
+    minuteRead
     slug
     title
     featuredImage {
@@ -80,12 +85,16 @@ const GET_FILTERED_POSTS = gql`
 export const usePosts = (
   category: string,
   title: string,
+  min_minute_read: number,
+  max_minute_read: number,
   isFiltered: boolean = false
 ) => {
   const { loading, error, data, refetch } = useQuery(GET_FILTERED_POSTS, {
     variables: {
       category,
       title,
+      min_minute_read,
+      max_minute_read,
       isFiltered,
     },
   });
