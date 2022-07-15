@@ -40,6 +40,7 @@ const GET_FILTERED_POSTS = gql`
     $isFiltered: Boolean
   ) {
     posts: posts(
+      first: 20
       where: {
         AND: [
           { categories_some: { slug_contains: $category } }
@@ -87,6 +88,7 @@ const GET_SEARCHED_POSTS = gql`
     $max_minute_read: Int = 15
   ) {
     posts: posts(
+      first:20
       where: {
         AND: [
           {
