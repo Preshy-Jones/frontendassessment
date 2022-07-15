@@ -16,7 +16,8 @@ I used the redux toolkit to save the search Value of the user and a boolean "isS
 Proposed Improvements:
 - A real time search funtionality that will eliminate the need for users to click on the button to view their search results. Enabling them to see their search results instantly while they are typing.
 - A sorting option to sort from newest to oldest and vice versa and non alphabetically.
--
+- Pagination, I would add a cursor type paginator using graphcms "connection" queries
+
 
 
 
