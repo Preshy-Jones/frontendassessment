@@ -14,4 +14,6 @@ I used the redux toolkit to save the search Value of the user and a boolean "isS
 
 
 
-ps: Pls note that sending too many requests may return an error from time to time due to using graphcms free tier.
+ps: Pls note that sending too many requests requests in a short period may return an error from time to time due to using graphcms's free tier.
+If you arrive at en error, pls wait a few seconds before filtering or searching again.
+Thank you

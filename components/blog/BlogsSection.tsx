@@ -22,25 +22,25 @@ const BlogsSection: React.FC = () => {
 
   const { isSearch } = useAppSelector((store) => store.blog);
 
-  if (loading)
-    return (
-      <Box>
-        <Center>
-          <Spinner color="pink.400" />
-        </Center>
-      </Box>
-    );
-  if (error) return `Error! ${error.message}`;
+  // if (loading)
+  //   return (
+  //     <Box>
+  //       <Center>
+  //         <Spinner color="pink.400" />
+  //       </Center>
+  //     </Box>
+  //   );
+  // if (error) return `Error! ${error.message}`;
 
-  if (searchLoading)
-    return (
-      <Box>
-        <Center>
-          <Spinner color="pink.400" />
-        </Center>
-      </Box>
-    );
-  if (searchError) return `Error! ${searchError.message}`;
+  // if (searchLoading)
+  //   return (
+  //     <Box>
+  //       <Center>
+  //         <Spinner color="pink.400" />
+  //       </Center>
+  //     </Box>
+  //   );
+  // if (searchError) return `Error! ${searchError.message}`;
 
   const handleFilter = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -59,6 +59,23 @@ const BlogsSection: React.FC = () => {
         searchRefetch={searchRefetch}
         getPosts={getPosts}
       />
+      {loading && (
+        <Box>
+          <Center>
+            <Spinner color="pink.400" />
+          </Center>
+        </Box>
+      )}
+      {searchLoading && (
+        <Box>
+          <Center>
+            <Spinner color="pink.400" />
+          </Center>
+        </Box>
+      )}
+      {error && <Text>Error: {error.message}</Text>}
+      {searchError && <Text>Error: {searchError.message}</Text>}
+
       <Flex justify="center">
         <Grid
           pt={12}
