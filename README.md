@@ -11,3 +11,7 @@ I used the refetch function returned from the useQuery hook to handle filtering 
 To handle search, I used Apollo client's useLazyQuery instead because unlike the useQuery hook which queries the Api once the it is initialized, the useLazyQuery hook allows me to only query graphql api when I decide to(in this case when a user submits his search value).
 
 I used the redux toolkit to save the search Value of the user and a boolean "isSearch" to check if a user in the default mode or search mode.
+
+
+
+ps: Pls note that sending too many requests may return an error from time to time due to using graphcms free tier.
