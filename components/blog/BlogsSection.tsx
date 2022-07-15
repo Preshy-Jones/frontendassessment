@@ -62,7 +62,7 @@ const BlogsSection: React.FC = () => {
       <Flex justify="center">
         <Grid
           pt={12}
-          templateColumns="repeat(3, 1fr)"
+          templateColumns="repeat(4, 1fr)"
           columnGap={9}
           rowGap={5}
           width="75%"

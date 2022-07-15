@@ -38,10 +38,10 @@ const Blog: React.FC<Props> = ({ post }) => {
           color="white"
           backgroundColor="pink.600"
         >
-          <Text fontWeight="bold">
+          <Text fontWeight="bold" fontSize="sm">
             {post.categories.map((category) => category.name).join(",")}
           </Text>
-          <Text>{`${post.minuteRead}min read`}</Text>
+          <Text fontSize="sm">{`${post.minuteRead}min read`}</Text>
         </Flex>
         <Text fontWeight="extrabold" fontSize="xl">
           {" "}
