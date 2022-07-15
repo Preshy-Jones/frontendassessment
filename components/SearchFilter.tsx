@@ -88,7 +88,7 @@ const SearchFilter: React.FC = ({ refetch, searchRefetch, getPosts }: any) => {
   return (
     <Flex justify="center">
       <Box width="75%">
-        <Text>{searchValue}</Text>
+        
         <form onSubmit={handleSearch}>
           <Flex>
             <InputGroup>
