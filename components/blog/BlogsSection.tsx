@@ -1,4 +1,13 @@
-import { Box, Button, Flex, Grid, GridItem, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Grid,
+  GridItem,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { usePosts, useSearch } from "../../hooks";
 import { useAppSelector } from "../../store/hooks";
@@ -9,16 +18,28 @@ const BlogsSection: React.FC = () => {
   const { loading, data, error, refetch } = usePosts("", "", 0, 15, true);
   const { getPosts, searchLoading, searchError, searchData, searchRefetch } =
     useSearch("", "", "", 0, 15);
-  ;
-
   // const [isFiltered, setIsFiltered] = useState(false);
 
   const { isSearch } = useAppSelector((store) => store.blog);
 
-  if (loading) return "Loading...";
+  if (loading)
+    return (
+      <Box>
+        <Center>
+          <Spinner color="pink.400" />
+        </Center>
+      </Box>
+    );
   if (error) return `Error! ${error.message}`;
 
-  if (searchLoading) return "Loading...";
+  if (searchLoading)
+    return (
+      <Box>
+        <Center>
+          <Spinner color="pink.400" />
+        </Center>
+      </Box>
+    );
   if (searchError) return `Error! ${searchError.message}`;
 
   const handleFilter = (
